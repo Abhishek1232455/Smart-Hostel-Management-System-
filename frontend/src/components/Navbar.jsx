@@ -14,11 +14,11 @@ export default function Navbar({ activeTab, setActiveTab }) {
           width: '42px',
           height: '42px',
           borderRadius: '12px',
-          background: 'linear-gradient(135deg, var(--primary), var(--accent-violet))',
+          background: 'linear-gradient(135deg, var(--primary), #7f1d1d)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: 'var(--shadow-glow-primary)'
+          boxShadow: 'var(--shadow-glow-red)'
         }}>
           <Building2 size={24} color="#fff" />
         </div>

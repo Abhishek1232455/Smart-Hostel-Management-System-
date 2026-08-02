@@ -57,11 +57,11 @@ export default function Login() {
             height: '64px',
             margin: '0 auto 16px auto',
             borderRadius: '16px',
-            background: 'linear-gradient(135deg, var(--primary), var(--accent-cyan))',
+            background: 'linear-gradient(135deg, var(--primary), #7f1d1d)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: 'var(--shadow-glow-primary)'
+            boxShadow: 'var(--shadow-glow-red)'
           }}>
             <Building2 size={36} color="#fff" />
           </div>
