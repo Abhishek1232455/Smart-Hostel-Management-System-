@@ -154,28 +154,28 @@ export default function StudentDashboard() {
   return (
     <div>
       {/* Profile Overview Card */}
-      <div className="glass-card" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, rgba(99,102,241,0.1), rgba(6,182,212,0.05))' }}>
+      <div className="glass-card" style={{ marginBottom: '24px', background: 'linear-gradient(135deg, #ffffff, #fef2f2)', border: '1px solid rgba(220, 38, 38, 0.25)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '700' }}>Welcome, {user.name}</h2>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#111827' }}>Welcome, {user.name}</h2>
               <span className="badge badge-primary">{user.batch || 'Batch 2024'}</span>
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+            <p style={{ color: '#4b5563', fontSize: '0.9rem' }}>
               Roll Number: <strong>{user.roll_number || 'N/A'}</strong> | Email: {user.email}
             </p>
           </div>
 
           <div style={{ display: 'flex', gap: '16px' }}>
-            <div style={{ padding: '12px 20px', borderRadius: '12px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-glass)', textAlign: 'center' }}>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>ALLOTTED ROOM</p>
-              <h3 style={{ fontSize: '1.3rem', color: user.room ? 'var(--accent-emerald)' : 'var(--accent-amber)' }}>
+            <div style={{ padding: '12px 20px', borderRadius: '12px', background: '#ffffff', border: '1px solid rgba(220,38,38,0.2)', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+              <p style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600' }}>ALLOTTED ROOM</p>
+              <h3 style={{ fontSize: '1.3rem', color: user.room ? 'var(--accent-emerald)' : 'var(--primary)' }}>
                 {user.room ? user.room.room_number : 'Not Allotted'}
               </h3>
             </div>
 
-            <div style={{ padding: '12px 20px', borderRadius: '12px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-glass)', textAlign: 'center' }}>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>HOSTEL BLOCK</p>
+            <div style={{ padding: '12px 20px', borderRadius: '12px', background: '#ffffff', border: '1px solid rgba(220,38,38,0.2)', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+              <p style={{ fontSize: '0.75rem', color: '#6b7280', fontWeight: '600' }}>HOSTEL BLOCK</p>
               <h3 style={{ fontSize: '1.3rem', color: 'var(--primary)' }}>
                 {user.room ? user.room.block : 'Pending'}
               </h3>
