@@ -42,6 +42,11 @@ function updateHolidayPassStatus(req, res) {
   const { passId } = req.params;
   const { status } = req.body; // APPROVED, REJECTED, CHECKED_OUT, COMPLETED
 
+  const pass = dbHelper.get('SELECT * FROM holiday_passes WHERE id = ?', [passId]);
+  if (!pass) {
+    return res.status(404).json({ error: 'Holiday pass not found' });
+  }
+
   let updateSql = `UPDATE holiday_passes SET status = ?`;
   const params = [status];
 
@@ -55,6 +60,15 @@ function updateHolidayPassStatus(req, res) {
   params.push(passId);
 
   dbHelper.run(updateSql, params);
+
+  // Trigger Notification to Student
+  const { createNotification } = require('./notificationController');
+  createNotification(
+    pass.student_id,
+    `Holiday Gate Pass ${status}`,
+    `Your leave request to ${pass.destination} has been marked as ${status}.`,
+    'APPROVAL'
+  );
 
   res.json({ message: `Holiday pass status updated to ${status}` });
 }

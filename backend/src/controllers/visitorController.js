@@ -98,6 +98,15 @@ function verifyAndScanPass(req, res) {
     [guardId, pass.id]
   );
 
+  // Trigger Notification to Student
+  const { createNotification } = require('./notificationController');
+  createNotification(
+    pass.student_id,
+    'Visitor Arrived at Gate',
+    `Your visitor ${pass.visitor_name} has been scanned and verified at the Main Gate.`,
+    'GENERAL'
+  );
+
   res.json({
     valid: true,
     message: 'Visitor pass VERIFIED successfully!',

@@ -1,13 +1,29 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Building2, Shield, User, QrCode, Lock, ArrowRight } from 'lucide-react';
+import { Building2, Shield, User, QrCode, Lock, ArrowRight, UserCheck } from 'lucide-react';
 
 export default function Login() {
   const { login } = useAuth();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+
+  const [selectedRole, setSelectedRole] = useState('student');
+  const [username, setUsername] = useState('student1');
+  const [password, setPassword] = useState('password');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const roles = [
+    { id: 'student', label: 'Student', icon: User, defaultUser: 'student1', color: 'var(--accent-emerald)', badge: 'badge-emerald' },
+    { id: 'warden', label: 'Warden', icon: Shield, defaultUser: 'warden1', color: 'var(--accent-rose)', badge: 'badge-rose' },
+    { id: 'guard', label: 'Gate Staff', icon: QrCode, defaultUser: 'guard1', color: 'var(--accent-amber)', badge: 'badge-amber' },
+    { id: 'admin', label: 'Admin', icon: Lock, defaultUser: 'admin1', color: 'var(--primary)', badge: 'badge-primary' }
+  ];
+
+  const handleRoleSelect = (roleObj) => {
+    setSelectedRole(roleObj.id);
+    setUsername(roleObj.defaultUser);
+    setPassword('password');
+    setError('');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,17 +38,7 @@ export default function Login() {
     }
   };
 
-  const handleQuickLogin = async (u, p) => {
-    setError('');
-    setLoading(true);
-    try {
-      await login(u, p);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const currentRoleObj = roles.find(r => r.id === selectedRole) || roles[0];
 
   return (
     <div style={{
@@ -42,10 +48,10 @@ export default function Login() {
       justifyContent: 'center',
       padding: '24px'
     }}>
-      <div style={{ maxWidth: '480px', width: '100%' }}>
+      <div style={{ maxWidth: '520px', width: '100%' }}>
         
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+        {/* Branding Header */}
+        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <div style={{
             width: '64px',
             height: '64px',
@@ -59,13 +65,68 @@ export default function Login() {
           }}>
             <Building2 size={36} color="#fff" />
           </div>
-          <h1 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '8px' }}>SmartHostel</h1>
-          <p style={{ color: 'var(--text-muted)' }}>AI & IoT Enabled Hostel Management System</p>
+          <h1 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '6px' }}>SmartHostel</h1>
+          <p style={{ color: 'var(--text-muted)' }}>AI & IoT Enabled Hostel Management Platform</p>
         </div>
 
         {/* Card */}
         <div className="glass-card">
-          <h3 style={{ fontSize: '1.2rem', marginBottom: '20px', fontWeight: '600' }}>Sign In to Portal</h3>
+          
+          {/* Role Selector Buttons */}
+          <div style={{ marginBottom: '24px' }}>
+            <label className="form-label" style={{ textAlign: 'center', marginBottom: '12px', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Select Login Role
+            </label>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', background: 'rgba(0,0,0,0.3)', padding: '6px', borderRadius: '12px' }}>
+              {roles.map(r => {
+                const IconComponent = r.icon;
+                const isSelected = selectedRole === r.id;
+                return (
+                  <button
+                    key={r.id}
+                    type="button"
+                    onClick={() => handleRoleSelect(r)}
+                    style={{
+                      padding: '10px 6px',
+                      borderRadius: '10px',
+                      border: isSelected ? `1px solid ${r.color}` : '1px solid transparent',
+                      background: isSelected ? 'rgba(255,255,255,0.08)' : 'transparent',
+                      color: isSelected ? '#fff' : 'var(--text-muted)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '6px',
+                      transition: 'all 0.2s ease',
+                      boxShadow: isSelected ? `0 4px 14px rgba(0,0,0,0.4)` : 'none'
+                    }}
+                  >
+                    <IconComponent size={20} color={isSelected ? r.color : 'var(--text-muted)'} />
+                    <span style={{ fontSize: '0.78rem', fontWeight: isSelected ? '700' : '500' }}>{r.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Selected Role Status Banner */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '10px 14px',
+            borderRadius: '10px',
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid var(--border-glass)',
+            marginBottom: '20px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <UserCheck size={18} color={currentRoleObj.color} />
+              <span style={{ fontSize: '0.88rem', fontWeight: '600' }}>Logging in as <strong>{currentRoleObj.label}</strong></span>
+            </div>
+            <span className={`badge ${currentRoleObj.badge}`}>{currentRoleObj.id}</span>
+          </div>
 
           {error && (
             <div style={{
@@ -87,7 +148,7 @@ export default function Login() {
               <input
                 type="text"
                 className="form-input"
-                placeholder="e.g. student1, warden1, guard1"
+                placeholder={`Enter ${currentRoleObj.label} Username`}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
@@ -99,7 +160,7 @@ export default function Login() {
               <input
                 type="password"
                 className="form-input"
-                placeholder="Enter your password"
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -112,50 +173,9 @@ export default function Login() {
               style={{ width: '100%', marginTop: '8px', padding: '12px' }}
               disabled={loading}
             >
-              {loading ? 'Authenticating...' : <>Login <ArrowRight size={18} /></>}
+              {loading ? 'Authenticating...' : <>Login as {currentRoleObj.label} <ArrowRight size={18} /></>}
             </button>
           </form>
-
-          {/* Quick Demo Profiles */}
-          <div style={{ marginTop: '28px', paddingTop: '20px', borderTop: '1px solid var(--border-glass)' }}>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '12px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              One-Click Demo Profiles
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('student1', 'password')}
-                className="btn btn-secondary"
-                style={{ fontSize: '0.82rem', justifyContent: 'flex-start' }}
-              >
-                <User size={16} color="var(--accent-emerald)" /> Student Demo
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('warden1', 'password')}
-                className="btn btn-secondary"
-                style={{ fontSize: '0.82rem', justifyContent: 'flex-start' }}
-              >
-                <Shield size={16} color="var(--accent-rose)" /> Warden Demo
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('guard1', 'password')}
-                className="btn btn-secondary"
-                style={{ fontSize: '0.82rem', justifyContent: 'flex-start' }}
-              >
-                <QrCode size={16} color="var(--accent-amber)" /> Guard Scanner
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('admin1', 'password')}
-                className="btn btn-secondary"
-                style={{ fontSize: '0.82rem', justifyContent: 'flex-start' }}
-              >
-                <Lock size={16} color="var(--primary)" /> Admin Demo
-              </button>
-            </div>
-          </div>
 
         </div>
 

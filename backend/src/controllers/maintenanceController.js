@@ -77,6 +77,15 @@ function updateTicketStatus(req, res) {
     [ticketId]
   );
 
+  // Trigger Notification to Student
+  const { createNotification } = require('./notificationController');
+  createNotification(
+    updatedTicket.student_id,
+    `Maintenance Ticket ${status}`,
+    `Your ticket "${updatedTicket.title}" status is now ${status}. ${assigned_to ? 'Assigned to: ' + assigned_to : ''}`,
+    'GENERAL'
+  );
+
   res.json({
     message: `Ticket updated to ${status}`,
     ticket: enrichTicketWithSLA(updatedTicket)
