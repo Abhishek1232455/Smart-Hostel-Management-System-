@@ -1,0 +1,18 @@
+{
+  "name": "smart-hostel-backend",
+  "version": "1.0.0",
+  "description": "Backend API service for Smart Hostel Management System",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "seed": "node src/database/seed.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3",
+    "sql.js": "^1.11.0",
+    "dotenv": "^16.4.5"
+  }
+}
